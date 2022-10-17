@@ -28,7 +28,7 @@ def conexao():
 def desconectar(conexao):
         if conexao:
                 conexao.close()
-
+  
 def selecionarUsuarios():
         conn = conexao()
         cursor = conn.cursor()
