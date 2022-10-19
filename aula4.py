@@ -28,15 +28,24 @@ def conexao():
 def desconectar(conexao):
         if conexao:
                 conexao.close()
-  
+
 def selecionarUsuarios():
         conn = conexao()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM USUARIOS")
+        cursor.execute("SELECT * FROM usuarios")
+        table = cursor.fetchall()
+        print('\n Usuarios: ')
+        for row in table:
+                print(row[0], end="")
+                print(row[1], end="")
+                print(row[2], end="")
+                print(row[4], end="")
+
+
 
 def cadastrarUsuarios():
     janelaUsuarios = tk.Toplevel(app)
-
+    selecionarUsuarios()
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
             ,bg="white",foreground="black")
@@ -106,6 +115,7 @@ fileMenu.add_command(label="Cadastrar Produtos"
 menuPrincipal.add_cascade(label="Funcao"
                         ,menu=fileMenu)
 
+
 #buttonExample = tk.Button(app, 
 #              text="Create new window",
 #              command=createNewWindow)
@@ -114,4 +124,4 @@ app.title("Sistema Tarumã")
 app.geometry("800x600")
 
 app.mainloop()
-app.destroy()
+#app.destroy()
