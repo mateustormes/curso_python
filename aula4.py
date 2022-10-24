@@ -1,5 +1,7 @@
 import tkinter as tk
+from tkinter import ttk
 import mysql.connector
+from tkinter.messagebox import showinfo
 #pip install mysql-connector
 
 class Usuarios:
@@ -29,12 +31,35 @@ def desconectar(conexao):
         if conexao:
                 conexao.close()
 
-def selecionarUsuarios():
+def selecionarUsuarios(janelaUsuarios):
         conn = conexao()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM usuarios")
         table = cursor.fetchall()
         print('\n Usuarios: ')
+
+        columns = ('id','nome','sobrenome','cidade','estado','data_nascimento')
+        tree = ttk.Treeview(janelaUsuarios, columns=columns, show='headings')
+
+        #define cabeçalhos
+        tree.heading('id',text='#')
+        tree.heading('nome',text='Nome')
+        tree.heading('sobrenome', text='Sobrenome')
+        tree.heading('cidade',text='Cidade')
+        tree.heading('estado',text='Estado')
+        tree.heading('data_nascimento',text='Data de Nascimento')
+        
+        def item_selected(self):
+                item = tree.focus()
+        tree.bind('<<TreeviewSelect>>', item_selected)
+        tree.grid(row=0, column=0, sticky=tk.NSEW)
+
+        #adicionar uma barra de rolagem
+        scrollbar = ttk.Scrollbar(janelaUsuarios, orient=tk.VERTICAL,command=tree.yview)
+        tree.configure(yscroll=scrollbar.set)
+        scrollbar.grid(row=0, column=1,sticky='ns')
+
+
         for row in table:
                 print("Id: ", row[0], end="\n")
                 print("Nome: ", row[1], end="\n")
@@ -54,7 +79,7 @@ def inserirUsuarios(usuario):
 
 def cadastrarUsuarios():
     janelaUsuarios = tk.Toplevel(app)
-    selecionarUsuarios()
+    selecionarUsuarios(janelaUsuarios)
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
             ,bg="white",foreground="black")
