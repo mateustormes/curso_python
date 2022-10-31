@@ -59,15 +59,12 @@ def selecionarUsuarios(janelaUsuarios):
         tree.configure(yscroll=scrollbar.set)
         scrollbar.grid(row=0, column=1,sticky='ns')
 
-
+        usuarios = []
         for row in table:
-                print("Id: ", row[0], end="\n")
-                print("Nome: ", row[1], end="\n")
-                print("Sobrenome: ",row[2], end="\n")
-                print("Cidade: ",row[3], end="\n")
-                print("Estado: ",row[4], end="\n")
-                print("Nascimento: ",row[5], end="\n")
-
+                usuarios.append((f'{row[0]}', f'{row[1]}', f'{row[2]}', f'{row[3]}', f'{row[4]}', f'{row[5]}'))
+        
+        for user in usuarios:
+                tree.insert('',tk.END,values=user)
 def inserirUsuarios(usuario):
         con = conexao()
         cursor = con.cursor()
@@ -77,44 +74,57 @@ def inserirUsuarios(usuario):
         con.commit()
         desconectar(con)
 
-def cadastrarUsuarios():
+def abrirTelaUsuarios():
     janelaUsuarios = tk.Toplevel(app)
     selecionarUsuarios(janelaUsuarios)
+
+    lblId = tk.Label(janelaUsuarios,text="Informe o Id: "
+                        , font="Times"
+                        ,foreground="black")
+    lblId.place(x=100, y=230)
+
+    entryId = tk.Entry(janelaUsuarios)
+    entryId.place(x=230,y=235)
+
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblNome.place(x=100,y=50)
+    lblNome.place(x=100,y=250)
 
     entryNome = tk.Entry(janelaUsuarios)
-    entryNome.place(x=230,y=55)
+    entryNome.place(x=230,y=255)
     
     lblSobrenome = tk.Label(janelaUsuarios,text="Informe o seu sobrenome: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblSobrenome.place(x=100,y=75)
+    lblSobrenome.place(x=100,y=275)
+
     entrySobrenome = tk.Entry(janelaUsuarios)
-    entrySobrenome.place(x=260, y=75)
+    entrySobrenome.place(x=260, y=275)
 
     lblDataNascimento = tk.Label(janelaUsuarios,text="Informe sua data de nascimento"
             ,font="Times"
             ,bg="white", foreground="black")
-    lblDataNascimento.place(x=100, y=100)
+    lblDataNascimento.place(x=100, y=300)
+
     entryDataNascimento = tk.Entry(janelaUsuarios)
-    entryDataNascimento.place(x=300, y=100)
+    entryDataNascimento.place(x=300, y=300)
 
     lblCidade = tk.Label(janelaUsuarios,text="Informe a sua cidade"
             ,font="Times"
             ,bg="white", foreground="black")
-    lblCidade.place(x=100,y=125)
+    lblCidade.place(x=100,y=325)
+
     entryCidade = tk.Entry(janelaUsuarios)
-    entryCidade.place(x=230,y=125)
+    entryCidade.place(x=230,y=325)
 
     lblEstado = tk.Label(janelaUsuarios, text="Informe o estado: "
             ,font="Times"
             ,bg="white",foreground="black")
-    lblEstado.place(x=100, y=150)
+    lblEstado.place(x=100, y=350)
+    
     entryEstado = tk.Entry(janelaUsuarios)
-    entryEstado.place(x=230, y=150)
+    entryEstado.place(x=230, y=350)
     
     def salvarUsuario():
         usuario = Usuarios(None, entryNome.get(), entrySobrenome.get(),entryCidade.get(),
@@ -122,27 +132,29 @@ def cadastrarUsuarios():
         inserirUsuarios(usuario)
     btnSalvar = tk.Button(janelaUsuarios,width=20
             ,text="Salvar", command=salvarUsuario)
-    btnSalvar.place(x=100,y=175)
+    btnSalvar.place(x=100,y=375)
     
     #entryNome.insert("end","teste")
     #entryNome.insert("end","tormes")
     
     janelaUsuarios.title("Cadastro de Usuários")
     janelaUsuarios.geometry("800x600")
-def cadastrarProdutos():
+def abrirTelaProdutos():
     janelaProduto = tk.Toplevel(app)
     janelaProduto.title("Cadastro de Produtos")
     janelaProduto.geometry("800x600")
 app = tk.Tk()
+
+
 
 menuPrincipal = tk.Menu(app)
 app.config(menu=menuPrincipal)
 
 fileMenu = tk.Menu(menuPrincipal)
 fileMenu.add_command(label="Cadastrar Usuários"
-            ,command=cadastrarUsuarios)
+            ,command=abrirTelaUsuarios)
 fileMenu.add_command(label="Cadastrar Produtos"
-            ,command=cadastrarProdutos)
+            ,command=abrirTelaProdutos)
 menuPrincipal.add_cascade(label="Funcao"
                         ,menu=fileMenu)
 
